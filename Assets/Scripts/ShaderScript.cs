@@ -26,6 +26,7 @@ public class ShaderScript : MonoBehaviour {
 		}
 		
 		computeShader.SetTexture(kernelId, "Result", renderTexture);
+		computeShader.SetFloat("Time", Time.time);
 		computeShader.SetFloat("Width", renderTexture.width);
 		computeShader.SetFloat("Height", renderTexture.height);
 
