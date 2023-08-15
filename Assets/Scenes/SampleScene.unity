@@ -228,11 +228,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6ce6bb6ccf6ef41a6a7fb9e095e015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  computeShader: {fileID: 7200000, guid: 522dcaaf194a5dc4dbf5c6bc764d544c, type: 3}
+  computeShader: {fileID: 7200000, guid: 3a138dc4ebe680247a7862ba8929af00, type: 3}
   renderTexture: {fileID: 0}
   textureSize: 256
   textureDepth: 24
   threadDivisor: 8
+  oldThreadDivisor: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
