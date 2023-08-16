@@ -8,7 +8,7 @@ public class ShaderScript : MonoBehaviour {
 	public int textureDepth = 24;
 	private int oldTextureDepth;
 	public int threadDivisor = 8;
-	public int oldThreadDivisor;
+	private int oldThreadDivisor;
 	private int kernelId;
 
 	private void OnEnable() {
@@ -20,9 +20,6 @@ public class ShaderScript : MonoBehaviour {
 			renderTexture = new RenderTexture(textureSize, textureSize, textureDepth) {
 				enableRandomWrite = true
 			};
-			oldTextureSize = textureSize;
-			oldTextureDepth = textureDepth;
-			oldThreadDivisor = threadDivisor;
 		}
 		
 		computeShader.SetTexture(kernelId, "Result", renderTexture);
