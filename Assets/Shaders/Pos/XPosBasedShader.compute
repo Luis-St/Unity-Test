@@ -7,5 +7,5 @@ float Height;
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
 	float value = id.x / Width;
-	Result[id.xy] = float4(value, value, value, 0.0);
+	Result[id.xy] = float4(value, value, value, 1.0);
 }
