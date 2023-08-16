@@ -1,0 +1,27 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+float Time;
+float Width;
+float Height;
+float2 Size;
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+	if (0 > Size.x || 0 > Size.y) {
+		return;
+	}
+	float2 pos = float2(id.x, id.y);
+	float xPadding = (Width - Size.x) / 2;
+	float yPadding = (Height - Size.y) / 2;
+
+	const float topRight = xPadding + Size.x;
+	const float bottomLeft = yPadding + Size.y;
+	float2 topLeft = float2(xPadding, yPadding);
+	
+	if (pos.x > topLeft.x && topRight > pos.x && pos.y > topLeft.y && bottomLeft > pos.y) {
+		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+	} else {
+		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+	}
+}

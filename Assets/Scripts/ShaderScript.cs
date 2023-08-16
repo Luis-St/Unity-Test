@@ -29,6 +29,7 @@ public class ShaderScript : MonoBehaviour {
 		computeShader.SetFloat("Time", Time.time);
 		computeShader.SetFloat("Width", renderTexture.width);
 		computeShader.SetFloat("Height", renderTexture.height);
+		computeShader.SetFloats("Size", sizeX, sizeY);
 
 		computeShader.Dispatch(kernelId, textureSize / threadDivisor, textureSize / threadDivisor, 1);
 		Graphics.Blit(renderTexture, destination);
