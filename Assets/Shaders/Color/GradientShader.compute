@@ -9,5 +9,6 @@ float Height;
 void CSMain(uint3 id : SV_DispatchThreadID) {
 	float2 normalized = id.xy / float2(Width, Height);
 	float3 color = float3(normalized.x, normalized.y, 1.0 - normalized.x);
+	
 	Result[id.xy] = float4(color, 1.0);
 }

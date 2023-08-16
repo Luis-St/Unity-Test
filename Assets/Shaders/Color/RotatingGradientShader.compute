@@ -10,6 +10,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	float2 normalized = id.xy / float2(Width, Height) - 0.5;
 	float2 rotated = float2(normalized.x * cos(Time) - normalized.y * sin(Time), normalized.x * sin(Time) + normalized.y * cos(Time));
 	rotated += float2(0.5, 0.5);
+	
 	float3 color = float3(rotated.x, rotated.y, 1.0 - rotated.x);
 	Result[id.xy] = float4(color, 1.0);
 }

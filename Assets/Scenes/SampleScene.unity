@@ -231,9 +231,7 @@ MonoBehaviour:
   computeShader: {fileID: 7200000, guid: ea77e5eaa4d7e154181325c7071f29d0, type: 3}
   renderTexture: {fileID: 0}
   textureSize: 256
-  textureDepth: 24
   threadDivisor: 8
-  oldThreadDivisor: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
