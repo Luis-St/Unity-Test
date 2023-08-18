@@ -6,22 +6,27 @@ float Width;
 float Height;
 float2 Size;
 
+bool isWithinRectangle(float2 pos, float2 topLeft, float2 bottomRight);
+
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
 	if (0 > Size.x || 0 > Size.y) {
 		return;
 	}
-	float2 pos = float2(id.x, id.y);
+	const float2 pos = float2(id.x, id.y);
 	float xPadding = (Width - Size.x) / 2;
 	float yPadding = (Height - Size.y) / 2;
-
-	const float topRight = xPadding + Size.x;
-	const float bottomLeft = yPadding + Size.y;
-	float2 topLeft = float2(xPadding, yPadding);
 	
-	if (pos.x > topLeft.x && topRight > pos.x && pos.y > topLeft.y && bottomLeft > pos.y) {
+	const float2 topLeft = float2(xPadding, yPadding);
+	const float2 bottomRight = float2(xPadding + Size.x, yPadding + Size.y);
+	
+	if (isWithinRectangle(pos, topLeft, bottomRight)) {
 		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
 	} else {
 		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
 	}
+}
+
+bool isWithinRectangle(float2 pos, float2 topLeft, float2 bottomRight) {
+	return topLeft.x < pos.x && pos.x < bottomRight.x && topLeft.y < pos.y && pos.y < bottomRight.y;
 }
