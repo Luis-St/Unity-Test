@@ -13,9 +13,11 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	if (0 > Size.x || 0 > Size.y) {
 		return;
 	}
+	
 	const float2 pos = float2(id.x, id.y);
 	const float2 center = float2(Width / 2, Height / 2);
 	const float2 radius = Size / 2;
+	
 	if (isWithinEllipse(pos, center, radius)) {
 		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
 	} else {

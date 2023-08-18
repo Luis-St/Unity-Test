@@ -41,7 +41,7 @@ public class ShaderScript : MonoBehaviour {
 		computeShader.SetFloat("Height", renderTexture.height);
 		computeShader.SetFloats("Size", sizeX, sizeY);
         
-		computeShader.Dispatch(kernelId, Math.Max(1, textureSizeX) / Math.Max(1, threadDivisor), Math.Max(1, textureSizeY) / Math.Max(1, threadDivisor), 1);
+		computeShader.Dispatch(kernelId, textureSizeX / threadDivisor, textureSizeY / threadDivisor, 1);
 		Graphics.Blit(renderTexture, destination);
 		
 		oldTextureSizeX = textureSizeX;
