@@ -1,7 +1,6 @@
 #pragma kernel CSMain
 
 RWTexture2D<float4> Result;
-float Time;
 float Width;
 float Height;
 float2 Size;
