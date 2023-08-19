@@ -13,7 +13,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 		return;
 	}
 	
-	const uint2 pos = uint2(round(id.x), round(id.y));
+	const uint2 pos = uint2(id.x, id.y);
 	
 	if (isOnGrid(pos)) {
 		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);

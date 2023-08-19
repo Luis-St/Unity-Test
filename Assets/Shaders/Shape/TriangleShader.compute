@@ -15,7 +15,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	
 	const float2 pos = float2(id.x, id.y);
 	const float2 center = float2(Width / 2, Height / 2);
-	const float size = ((abs(Size.x - Size.y) / 2) + min(Size.x, Size.y))/* / 2*/;
+	const float size = ((abs(Size.x - Size.y) / 2) + min(Size.x, Size.y));
 	
 	if (isWithinTriangle(pos, center, size)) {
 		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
