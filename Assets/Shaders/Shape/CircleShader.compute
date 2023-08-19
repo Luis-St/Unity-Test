@@ -1,0 +1,44 @@
+#pragma kernel CSMain
+
+#define PI 3.1415926535897932384626433832795
+
+RWTexture2D<float4> Result;
+float Width;
+float Height;
+float2 Size;
+float2 Degree;
+
+bool isOnCircle(const float2 pos, const float2 center, const float radius, const float thickness);
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+	if (0 > Size.x || 0 > Size.y) {
+		return;
+	}
+
+	const float2 pos = float2(id.x, id.y);
+	const float2 center = float2(Width / 2, Height / 2);
+	const float radius = Size.x / 2;
+	const float thickness = 0.1 * Size.y;
+
+	if (isOnCircle(pos, center, radius, thickness)) {
+		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+	} else {
+		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+	}
+}
+
+bool isOnCircle(const float2 pos, const float2 center, const float radius, const float thickness) {
+	float2 diff = pos - center;
+	float degree = (atan2(diff.y, diff.x) * 180 / PI) - 90;
+	if (degree < 0) {
+		degree += 360;
+	}
+	if (degree >= Degree.x && Degree.y >= degree && round(Degree.x) != round(Degree.y)) {
+		const float dist = diff.x * diff.x + diff.y * diff.y;
+		const float squaredRadius = radius * radius;
+		const float squaredThickness = thickness * thickness;
+		return dist <= squaredRadius + squaredThickness && dist >= squaredRadius - squaredThickness;
+	}
+	return false;
+}
