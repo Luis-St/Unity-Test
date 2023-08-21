@@ -10,6 +10,7 @@ public class ShaderScript : MonoBehaviour {
 	[Min(1)] public int threadDivisor = 8;
 	[Min(1.0f)] public float sizeX = 1024.0f;
 	[Min(1.0f)] public float sizeY = 1024.0f;
+	[Range(1, 100)] public int count = 1;
 	[Range(0.0f, 360.0f)] public float degreeStart = 0.0f;
 	[Range(0.0f, 360.0f)] public float degreeEnd = 360.0f;
 
@@ -44,6 +45,7 @@ public class ShaderScript : MonoBehaviour {
 		computeShader.SetFloat("Width", renderTexture.width);
 		computeShader.SetFloat("Height", renderTexture.height);
 		computeShader.SetFloats("Size", sizeX, sizeY);
+		computeShader.SetInt("Count", count);
 		computeShader.SetFloats("Degree", degreeStart, degreeEnd);
 
 		computeShader.Dispatch(kernelId, textureSizeX / threadDivisor, textureSizeY / threadDivisor, 1);
