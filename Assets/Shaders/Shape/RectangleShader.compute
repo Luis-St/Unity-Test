@@ -9,9 +9,6 @@ bool isWithinRectangle(float2 pos, float2 topLeft, float2 bottomRight);
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	if (0 > Size.x || 0 > Size.y) {
-		return;
-	}
 	const float2 pos = float2(id.x, id.y);
 	float xPadding = (Width - Size.x) / 2;
 	float yPadding = (Height - Size.y) / 2;

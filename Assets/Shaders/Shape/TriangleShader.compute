@@ -9,10 +9,6 @@ bool isWithinTriangle(const float2 pos, float2 center, const float size);
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	if (0 > Size.x || 0 > Size.y) {
-		return;
-	}
-	
 	const float2 pos = float2(id.x, id.y);
 	const float2 center = float2(Width / 2, Height / 2);
 	const float size = ((abs(Size.x - Size.y) / 2) + min(Size.x, Size.y));

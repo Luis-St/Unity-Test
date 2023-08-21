@@ -9,10 +9,6 @@ bool isOnGrid(const uint2 pos);
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	if (0 > Size.x || 0 > Size.y) {
-		return;
-	}
-	
 	const uint2 pos = uint2(id.x, id.y);
 	
 	if (isOnGrid(pos)) {
