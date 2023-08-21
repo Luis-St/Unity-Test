@@ -1,0 +1,54 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+float Time;
+float Width;
+float Height;
+float2 Size;
+uint Count;
+
+bool isInSpiral(const float2 pos, const float2 center, const float radius, const float thickness);
+bool isInSpiralArm(const float2 pos, const float2 center, const float radius, const float thickness, const float offset);
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+	const float2 pos = float2(id.x, id.y);
+	const float2 center = float2(Width / 2, Height / 2);
+	const float radius = Size.x / 2;
+	const float thickness = Size.y / 10;
+	if (distance(pos, center) == 0.0 || isInSpiral(pos, center, radius, thickness)) {
+		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+	} else {
+		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+	}
+}
+
+bool isInSpiral(const float2 pos, const float2 center, const float radius, const float thickness) {
+	const float angle = 360.0 / Count;
+	for (uint i = 0; i < Count; ++i) {
+		if (isInSpiralArm(pos, center, radius, thickness, angle * i)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isInSpiralArm(const float2 pos, const float2 center, const float radius, const float thickness, const float offset) {
+	float2 diff = pos - center;
+	float degree = degrees(atan2(diff.y, diff.x)) + offset;
+	if (0 > degree) {
+		degree += 360.0;
+	}
+	degree += Time * 180.0;
+	const float percent = (round(degree) % 360) / 360.0;
+	const float r = radius * percent;
+	if (r > radius) {
+		return false;
+	}
+	
+	const float t = thickness * clamp(percent, 0.2, 0.8);
+	const float dist = diff.x * diff.x + diff.y * diff.y;
+	const float squaredRadius = r * r;
+	const float squaredThickness = t * t;
+	return dist <= squaredRadius + squaredThickness && dist >= squaredRadius - squaredThickness;
+}
