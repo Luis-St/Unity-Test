@@ -28,6 +28,7 @@ namespace Data {
 		public void DispatchBase(ScriptProperties properties, float startTime) {
 			var kernelId = @base.FindKernel("CSMain");
 			@base.SetTexture(kernelId, "Result", texture);
+			@base.SetVector("Color", properties.color);
 			@base.SetFloat("Time", Time.time);
 			@base.SetFloat("StartTime", startTime);
 			@base.SetFloat("Width", texture.width);
@@ -59,6 +60,7 @@ namespace Data {
 
 	[Serializable]
 	public class ScriptProperties {
+		public Color color;
 		[Min(1.0f)] public float sizeX;
 		[Min(1.0f)] public float sizeY;
 		[Range(1, 100)] public int count;
