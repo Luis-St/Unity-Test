@@ -43,6 +43,7 @@ namespace Data {
 			shader.SetFloat("StartTime", startTime);
 			shader.SetVector("ForegroundColor", properties.foregroundColor);
 			shader.SetVector("BackgroundColor", properties.backgroundColor);
+			shader.SetBool("Overlay", isOverlay);
 			shader.SetFloats("Size", properties.sizeX, properties.sizeY);
 			shader.SetInt("Count", properties.count);
 			shader.SetFloats("Degree", properties.degreeStart, properties.degreeEnd);

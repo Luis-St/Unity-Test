@@ -5,6 +5,7 @@ float Width;
 float Height;
 float4 ForegroundColor;
 float4 BackgroundColor;
+bool Overlay;
 float2 Size;
 uint Count;
 
@@ -18,7 +19,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float radius = Size.x / 2;
 	const float thickness = Size.y / 10;
 	if (isInSpiral(pos, center, radius, thickness)) {
+		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
+		}
 	} else {
 		Result[id.xy] = BackgroundColor;
 	}

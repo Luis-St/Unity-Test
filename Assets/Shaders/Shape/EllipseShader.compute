@@ -5,6 +5,7 @@ float Width;
 float Height;
 float4 ForegroundColor;
 float4 BackgroundColor;
+bool Overlay;
 float2 Size;
 
 bool isWithinEllipse(const float2 pos, const float2 center, const float2 radius);
@@ -16,7 +17,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float2 radius = Size / 2;
 	
 	if (isWithinEllipse(pos, center, radius)) {
+		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
+		}
 	} else {
 		Result[id.xy] = BackgroundColor;
 	}

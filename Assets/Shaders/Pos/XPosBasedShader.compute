@@ -3,9 +3,16 @@
 RWTexture2D<float4> Result;
 float Width;
 float Height;
+bool Overlay;
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	float value = id.x / Width;
-	Result[id.xy] = float4(value, value, value, 1.0);
+	const float value = id.x / Width;
+	const float4 color = float4(value, value, value, 1.0);
+	
+	if (Overlay) {
+		Result[id.xy] = Result[id.xy] * color;
+	} else {
+		Result[id.xy] = float4(value, value, value, 1.0);
+	}
 }

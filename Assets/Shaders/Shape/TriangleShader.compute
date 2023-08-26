@@ -5,6 +5,7 @@ float Width;
 float Height;
 float4 ForegroundColor;
 float4 BackgroundColor;
+bool Overlay;
 float2 Size;
 
 bool isWithinTriangle(const float2 pos, float2 center, const float size);
@@ -16,7 +17,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float size = ((abs(Size.x - Size.y) / 2) + min(Size.x, Size.y));
 	
 	if (isWithinTriangle(pos, center, size)) {
+		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
+		}
 	} else {
 		Result[id.xy] = BackgroundColor;
 	}

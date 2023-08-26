@@ -5,6 +5,7 @@ float Width;
 float Height;
 float4 ForegroundColor;
 float4 BackgroundColor;
+bool Overlay;
 float2 Size;
 
 bool isWithinRectangle(float2 pos, float2 topLeft, float2 bottomRight);
@@ -19,7 +20,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float2 bottomRight = float2(xPadding + Size.x, yPadding + Size.y);
 	
 	if (isWithinRectangle(pos, topLeft, bottomRight)) {
+		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
+		}
 	} else {
 		Result[id.xy] = BackgroundColor;
 	}

@@ -23,6 +23,7 @@ public class ShaderScript : MonoBehaviour {
 		}
 		
 		shader.DispatchBase(properties, startTime);
+		shader.DispatchOverlay(properties, startTime);
 		Graphics.Blit(shader.texture, destination);
 		
 		texture.Update();
