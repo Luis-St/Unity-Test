@@ -8,6 +8,7 @@ float4 BackgroundColor;
 bool Overlay;
 float2 Size;
 uint Count;
+bool Invert;
 
 bool isInSpiral(const float2 pos, const float2 center, const float radius, const float thickness);
 bool isInSpiralArm(const float2 pos, const float2 center, const float radius, const float thickness, const float offset);
@@ -18,7 +19,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float2 center = float2(Width / 2, Height / 2);
 	const float radius = Size.x / 2;
 	const float thickness = Size.y / 10;
-	if (isInSpiral(pos, center, radius, thickness)) {
+	if (isInSpiral(pos, center, radius, thickness) != Invert) {
 		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
 		}

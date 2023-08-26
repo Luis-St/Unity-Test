@@ -244,6 +244,7 @@ MonoBehaviour:
     count: 1
     degreeStart: 0
     degreeEnd: 360
+    invert: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

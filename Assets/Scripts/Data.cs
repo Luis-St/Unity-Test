@@ -47,6 +47,7 @@ namespace Data {
 			shader.SetFloats("Size", properties.sizeX, properties.sizeY);
 			shader.SetInt("Count", properties.count);
 			shader.SetFloats("Degree", properties.degreeStart, properties.degreeEnd);
+			shader.SetBool("Invert", properties.invert);
 			shader.Dispatch(kernelId, texture.width / 8, texture.height / 8, 1);
 		}
 	}
@@ -78,6 +79,7 @@ namespace Data {
 		[Range(1, 100)] public int count;
 		[Range(0.0f, 360.0f)] public float degreeStart;
 		[Range(0.0f, 360.0f)] public float degreeEnd;
+		public bool invert;
 	}
 
 }

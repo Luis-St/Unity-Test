@@ -8,6 +8,7 @@ float4 BackgroundColor;
 bool Overlay;
 float2 Size;
 float2 Degree;
+bool Invert;
 
 bool isOnCircle(const float2 pos, const float2 center, const float radius, const float thickness);
 
@@ -18,7 +19,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float radius = Size.x / 2;
 	const float thickness = 0.1 * Size.y;
 
-	if (isOnCircle(pos, center, radius, thickness)) {
+	if (isOnCircle(pos, center, radius, thickness) != Invert) {
 		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
 		}

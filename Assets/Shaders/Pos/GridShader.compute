@@ -7,6 +7,7 @@ float4 ForegroundColor;
 float4 BackgroundColor;
 bool Overlay;
 float2 Size;
+bool Invert;
 
 bool isOnGrid(const uint2 pos);
 
@@ -14,7 +15,7 @@ bool isOnGrid(const uint2 pos);
 void CSMain(uint3 id : SV_DispatchThreadID) {
 	const uint2 pos = uint2(id.x, id.y);
 	
-	if (isOnGrid(pos)) {
+	if (isOnGrid(pos) != Invert) {
 		if (!Overlay) {
 			Result[id.xy] = ForegroundColor;
 		}
