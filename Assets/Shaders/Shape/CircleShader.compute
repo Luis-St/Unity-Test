@@ -3,6 +3,8 @@
 RWTexture2D<float4> Result;
 float Width;
 float Height;
+float4 ForegroundColor;
+float4 BackgroundColor;
 float2 Size;
 float2 Degree;
 
@@ -16,9 +18,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float thickness = 0.1 * Size.y;
 
 	if (isOnCircle(pos, center, radius, thickness)) {
-		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+			Result[id.xy] = ForegroundColor;
 	} else {
-		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+		Result[id.xy] = BackgroundColor;
 	}
 }
 

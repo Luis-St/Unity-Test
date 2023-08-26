@@ -11,32 +11,42 @@ namespace Data {
 		public RenderTexture texture;
 
 		public void CreateOrUpdateTexture(TextureData data) {
-			if (texture == null || data.HasChanged()) {
-				var y = data.sizeY;
-				if (data.forceAspectRatio) {
-					y = (data.sizeX / 16) * 9;
-				}
-				texture = new RenderTexture(data.sizeX, y, 24) {
-					enableRandomWrite = true
-				};
-				texture.Create();
+			if (texture != null && !data.HasChanged()) {
+				return;
 			}
+			var y = data.sizeY;
+			if (data.forceAspectRatio) {
+				y = (data.sizeX / 16) * 9;
+			}
+			texture = new RenderTexture(data.sizeX, y, 24) {
+				enableRandomWrite = true
+			};
+			texture.Create();
 		}
 		
 		public bool IsValid() => @base != null && texture != null && texture.width > 0 && texture.height > 0;
 		
-		public void DispatchBase(ScriptProperties properties, float startTime) {
-			var kernelId = @base.FindKernel("CSMain");
-			@base.SetTexture(kernelId, "Result", texture);
-			@base.SetVector("Color", properties.color);
-			@base.SetFloat("Time", Time.time);
-			@base.SetFloat("StartTime", startTime);
-			@base.SetFloat("Width", texture.width);
-			@base.SetFloat("Height", texture.height);
-			@base.SetFloats("Size", properties.sizeX, properties.sizeY);
-			@base.SetInt("Count", properties.count);
-			@base.SetFloats("Degree", properties.degreeStart, properties.degreeEnd);
-			@base.Dispatch(kernelId, texture.width / 8, texture.height / 8, 1);
+		public void DispatchBase(ScriptProperties properties, float startTime) => Dispatch(@base, @base.FindKernel("CSMain"), properties, false, startTime);
+		
+		public void DispatchOverlay(ScriptProperties properties, float startTime) {
+			if (overlay == null) {
+				return;
+			}
+			Dispatch(overlay, overlay.FindKernel("CSMain"), properties, true, startTime);
+		}
+
+		private void Dispatch(ComputeShader shader, int kernelId, ScriptProperties properties, bool isOverlay, float startTime) {
+			shader.SetTexture(kernelId, "Result", texture);
+			shader.SetFloat("Width", texture.width);
+			shader.SetFloat("Height", texture.height);
+			shader.SetFloat("Time", Time.time);
+			shader.SetFloat("StartTime", startTime);
+			shader.SetVector("ForegroundColor", properties.foregroundColor);
+			shader.SetVector("BackgroundColor", properties.backgroundColor);
+			shader.SetFloats("Size", properties.sizeX, properties.sizeY);
+			shader.SetInt("Count", properties.count);
+			shader.SetFloats("Degree", properties.degreeStart, properties.degreeEnd);
+			shader.Dispatch(kernelId, texture.width / 8, texture.height / 8, 1);
 		}
 	}
 
@@ -60,7 +70,8 @@ namespace Data {
 
 	[Serializable]
 	public class ScriptProperties {
-		public Color color;
+		public Color foregroundColor;
+		public Color backgroundColor;
 		[Min(1.0f)] public float sizeX;
 		[Min(1.0f)] public float sizeY;
 		[Range(1, 100)] public int count;

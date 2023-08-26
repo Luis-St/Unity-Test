@@ -3,6 +3,8 @@
 RWTexture2D<float4> Result;
 float Width;
 float Height;
+float4 ForegroundColor;
+float4 BackgroundColor;
 float2 Size;
 
 bool isWithinRectangle(float2 pos, float2 topLeft, float2 bottomRight);
@@ -17,9 +19,9 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float2 bottomRight = float2(xPadding + Size.x, yPadding + Size.y);
 	
 	if (isWithinRectangle(pos, topLeft, bottomRight)) {
-		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+			Result[id.xy] = ForegroundColor;
 	} else {
-		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+		Result[id.xy] = BackgroundColor;
 	}
 }
 

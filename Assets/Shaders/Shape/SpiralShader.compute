@@ -3,6 +3,8 @@
 RWTexture2D<float4> Result;
 float Width;
 float Height;
+float4 ForegroundColor;
+float4 BackgroundColor;
 float2 Size;
 uint Count;
 
@@ -15,14 +17,17 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 	const float2 center = float2(Width / 2, Height / 2);
 	const float radius = Size.x / 2;
 	const float thickness = Size.y / 10;
-	if (distance(pos, center) == 0.0 || isInSpiral(pos, center, radius, thickness)) {
-		Result[id.xy] = float4(1.0, 1.0, 1.0, 1.0);
+	if (isInSpiral(pos, center, radius, thickness)) {
+			Result[id.xy] = ForegroundColor;
 	} else {
-		Result[id.xy] = float4(0.0, 0.0, 0.0, 1.0);
+		Result[id.xy] = BackgroundColor;
 	}
 }
 
 bool isInSpiral(const float2 pos, const float2 center, const float radius, const float thickness) {
+	if (distance(pos, center) == 0.0) {
+		return true;
+	}
 	const float angle = 360.0 / Count;
 	for (uint i = 0; i < Count; ++i) {
 		if (isInSpiralArm(pos, center, radius, thickness, angle * i)) {

@@ -8,7 +8,7 @@ public class ShaderScript : MonoBehaviour {
 		sizeX = 1920, sizeY = 1080, forceAspectRatio = true
 	};
 	public ScriptProperties properties = new() {
-		color = Color.white, sizeX = 1024.0f, sizeY = 1024.0f, count = 1, degreeStart = 0.0f, degreeEnd = 360.0f
+		foregroundColor = Color.white, backgroundColor = Color.black, sizeX = 1024.0f, sizeY = 1024.0f, count = 1, degreeStart = 0.0f, degreeEnd = 360.0f
 	};
 	private float startTime;
 
