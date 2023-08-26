@@ -228,17 +228,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6ce6bb6ccf6ef41a6a7fb9e095e015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  computeShader: {fileID: 7200000, guid: 5b46742001dc59a46a8b65d5d1507040, type: 3}
-  renderTexture: {fileID: 0}
-  textureSizeX: 1920
-  textureSizeY: 1080
-  forceAspectRatio: 1
-  threadDivisor: 8
-  sizeX: 1024
-  sizeY: 1024
-  count: 1
-  degreeStart: 0
-  degreeEnd: 360
+  shader:
+    base: {fileID: 7200000, guid: 3a138dc4ebe680247a7862ba8929af00, type: 3}
+    overlay: {fileID: 0}
+    texture: {fileID: 0}
+  texture:
+    sizeX: 1920
+    sizeY: 1080
+    forceAspectRatio: 1
+  properties:
+    sizeX: 1024
+    sizeY: 1024
+    count: 1
+    degreeStart: 0
+    degreeEnd: 360
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

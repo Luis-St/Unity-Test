@@ -1,58 +1,30 @@
-using System;
+using Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ShaderScript : MonoBehaviour {
-	public ComputeShader computeShader;
-	public RenderTexture renderTexture;
-	[Min(1)] public int textureSizeX = 1920;
-	[Min(1)] public int textureSizeY = 1080;
-	public bool forceAspectRatio = true;
-	[Min(1)] public int threadDivisor = 8;
-	[Min(1.0f)] public float sizeX = 1024.0f;
-	[Min(1.0f)] public float sizeY = 1024.0f;
-	[Range(1, 100)] public int count = 1;
-	[Range(0.0f, 360.0f)] public float degreeStart = 0.0f;
-	[Range(0.0f, 360.0f)] public float degreeEnd = 360.0f;
-
-	#region Internal
-
-	private int oldTextureSizeX;
-	private int oldTextureSizeY;
-	private bool oldForceAspectRatio;
-	private int kernelId;
-
-	#endregion
+	public ShaderData shader = new();
+	public TextureData texture = new() {
+		sizeX = 1920, sizeY = 1080, forceAspectRatio = true
+	};
+	public ScriptProperties properties = new() {
+		color = Color.white, sizeX = 1024.0f, sizeY = 1024.0f, count = 1, degreeStart = 0.0f, degreeEnd = 360.0f
+	};
+	private float startTime;
 
 	private void OnEnable() {
-		kernelId = computeShader.FindKernel("CSMain");
+		startTime = Time.time;
 	}
 
 	private void OnRenderImage(RenderTexture source, RenderTexture destination) {
-		if (textureSizeX != oldTextureSizeX || textureSizeY != oldTextureSizeY || forceAspectRatio != oldForceAspectRatio) {
-			if (forceAspectRatio) {
-				textureSizeY = (textureSizeX / 16) * 9;
-			}
-			renderTexture = new RenderTexture(textureSizeX, textureSizeY, 24) {
-				enableRandomWrite = true
-			};
-			renderTexture.Create();
-		}
-		if (0 > renderTexture.width || 0 > renderTexture.height) {
+		shader.CreateOrUpdateTexture(texture);
+		if (!shader.IsValid()) {
 			return;
 		}
-		computeShader.SetTexture(kernelId, "Result", renderTexture);
-		computeShader.SetFloat("Time", Time.time);
-		computeShader.SetFloat("Width", renderTexture.width);
-		computeShader.SetFloat("Height", renderTexture.height);
-		computeShader.SetFloats("Size", sizeX, sizeY);
-		computeShader.SetInt("Count", count);
-		computeShader.SetFloats("Degree", degreeStart, degreeEnd);
-
-		computeShader.Dispatch(kernelId, textureSizeX / threadDivisor, textureSizeY / threadDivisor, 1);
-		Graphics.Blit(renderTexture, destination);
-
-		oldTextureSizeX = textureSizeX;
-		oldTextureSizeY = textureSizeY;
-		oldForceAspectRatio = forceAspectRatio;
+		
+		shader.DispatchBase(properties, startTime);
+		Graphics.Blit(shader.texture, destination);
+		
+		texture.Update();
 	}
 }
