@@ -1,0 +1,45 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+float Width;
+float Height;
+float Time;
+float4 ForegroundColor;
+float4 BackgroundColor;
+bool Overlay;
+float2 Size;
+bool Invert;
+
+bool isWithinArea(const int2 pos, const int index);
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+	const uint index = round(Time * 100) % Width;
+	
+	if (isWithinArea(id.xy, index) != Invert) {
+		if (Overlay) {
+			Result[id.xy] = Result[id.xy] * ForegroundColor;
+		} else {
+			Result[id.xy] = ForegroundColor;
+		}
+	} else {
+		if (Overlay) {
+			Result[id.xy] = Result[id.xy] * BackgroundColor;
+		} else {
+			Result[id.xy] = BackgroundColor;
+		}
+	}
+}
+
+bool isWithinArea(const int2 pos, const int index) {
+	int min = round(index - (Size.x / 2));
+	if (0 > min) {
+		min = Width + min;
+	}
+	const int max = uint(index + (Size.x / 2)) % uint(Width);
+	if (min > max) {
+		return pos.x >= min || max >= pos.x;
+	} else {
+		return pos.x >= min && max >= pos.x;
+	}
+}

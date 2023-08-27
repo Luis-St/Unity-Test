@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shader:
-    base: {fileID: 7200000, guid: 3a138dc4ebe680247a7862ba8929af00, type: 3}
+    base: {fileID: 7200000, guid: a2439c40b67b76f4ea74c182ebaf7368, type: 3}
     overlay: {fileID: 0}
     texture: {fileID: 0}
   texture:
