@@ -9,6 +9,7 @@ float4 BackgroundColor;
 bool Overlay;
 float2 Size;
 uint Count;
+float Speed;
 bool Invert;
 
 bool isInSpiral(const float2 pos, const float2 center, const float radius, const float thickness);
@@ -48,7 +49,7 @@ bool isInSpiralArm(const float2 pos, const float2 center, const float radius, co
 	if (0 > degree) {
 		degree += 360.0;
 	}
-	degree += Time * 180.0;
+	degree += Time * 180.0 * Speed;
 	const float percent = (round(degree) % 360) / 360.0;
 	const float r = radius * percent;
 	if (r > radius) {

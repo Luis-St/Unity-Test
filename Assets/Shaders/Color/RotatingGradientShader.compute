@@ -4,6 +4,7 @@ RWTexture2D<float4> Result;
 float Width;
 float Height;
 float Time;
+float Speed;
 
 float2 getRotation(const float2 normalized);
 
@@ -17,5 +18,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 }
 
 float2 getRotation(const float2 normalized) {
-	return float2(normalized.x * cos(Time) - normalized.y * sin(Time), normalized.x * sin(Time) + normalized.y * cos(Time)) + 0.5;
+	const float x = (normalized.x * cos(Time * Speed)) - (normalized.y * sin(Time * Speed));
+	const float y = (normalized.x * sin(Time * Speed)) + (normalized.y * cos(Time * Speed));
+	return float2(x, y) + 0.5;
 }

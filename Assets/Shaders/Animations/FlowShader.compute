@@ -8,13 +8,14 @@ float4 ForegroundColor;
 float4 BackgroundColor;
 bool Overlay;
 float2 Size;
+float Speed;
 bool Invert;
 
 bool isWithinArea(const int2 pos, const int index);
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	const uint index = round(Time * 100) % Width;
+	const uint index = round(Time * 100 * Speed) % Width;
 	
 	if (isWithinArea(id.xy, index) != Invert) {
 		if (Overlay) {

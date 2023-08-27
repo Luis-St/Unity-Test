@@ -46,6 +46,7 @@ namespace Data {
 			shader.SetBool("Overlay", isOverlay);
 			shader.SetFloats("Size", properties.sizeX, properties.sizeY);
 			shader.SetInt("Count", properties.count);
+			shader.SetFloat("Speed", properties.speed);
 			shader.SetFloats("Degree", properties.degreeStart, properties.degreeEnd);
 			shader.SetBool("Invert", properties.invert);
 			shader.Dispatch(kernelId, texture.width / 8, texture.height / 8, 1);
@@ -77,6 +78,7 @@ namespace Data {
 		[Min(1.0f)] public float sizeX;
 		[Min(1.0f)] public float sizeY;
 		[Range(1, 100)] public int count;
+		[Range(0.0f, 10.0f)] public float speed;
 		[Range(0.0f, 360.0f)] public float degreeStart;
 		[Range(0.0f, 360.0f)] public float degreeEnd;
 		public bool invert;

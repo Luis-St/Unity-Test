@@ -242,6 +242,7 @@ MonoBehaviour:
     sizeX: 1024
     sizeY: 1024
     count: 1
+    speed: 1
     degreeStart: 0
     degreeEnd: 360
     invert: 0
