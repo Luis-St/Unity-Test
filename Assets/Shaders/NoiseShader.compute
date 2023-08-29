@@ -1,47 +1,9 @@
 #pragma kernel CSMain
 
 RWTexture2D<float4> Result;
-float XResolution;
-float YResolution;
 
-float2 grad(float2 p);
-float lerp(const float a, const float b, const float t);
-float noise(const float2 pos);
 
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
-	float x = (id.x / XResolution) * 0.0625;
-	float y = (id.y / YResolution) * 0.0625;
-	float value = noise(float2(x, y));
-	Result[id.xy] = float4(value, value, value, 1.0);
-}
-
-float2 grad(float2 p) {
-	const float2 gradients = float2(1.0, -1.0);
-	float2 indices = frac(p) * 2.0;
-	indices = frac(indices);
-	indices = indices * gradients;
-	return indices;
-}
-
-float lerp(const float a, const float b, const float t) {
-	return a + t * (b - a);
-}
-
-float noise(const float2 pos) {
-	const float2 grads[4] = {
-		float2(1, 1), float2(-1, 1), float2(1, -1), float2(-1, -1)
-	};
-	float2 cell = floor(pos);
-	const float2 frac = pos - cell;
-	const int2 index = int2(cell) & 255;
-	const float dot00 = dot(grads[index.x + index.y * 2], frac);
-	const float dot10 = dot(grads[index.x + 1 + index.y * 2], frac - float2(1, 0));
-	const float dot01 = dot(grads[index.x + (index.y + 1) * 2], frac - float2(0, 1));
-	const float dot11 = dot(grads[index.x + 1 + (index.y + 1) * 2], frac - float2(1, 1));
-	float2 fade = frac * frac * frac * (frac * (frac * 6 - 15) + 10);
-	const float x = lerp(dot00, dot10, fade.x);
-	const float y = lerp(dot01, dot11, fade.x);
-	const float noise = lerp(x, y, fade.y);
-	return (noise + 1.0) * 0.5;
+	
 }
