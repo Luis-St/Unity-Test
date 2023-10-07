@@ -1,0 +1,70 @@
+#pragma kernel CSMain
+
+#define SQRT_3 1.7320508075688772
+#define F2 (0.5 * (SQRT_3 - 1.0))
+#define G2 ((3.0 - SQRT_3) / 6.0)
+#define dot(gradient, x, y, z) (gradient.x * x + gradient.y * y + gradient.z * z)
+
+RWTexture2D<float4> Result;
+RWStructuredBuffer<int3> Gradient;
+RWStructuredBuffer<int> Permutation;
+int2 StartPos;
+int2 Size;
+
+int permutation(const int x);
+double cornerNoise(const int hash, const double x, const double y, const double z, const double w);
+
+double noise(const double x, const double z);
+
+[numthreads(16,16,1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+	const double value = noise(id.x * 0.0025, id.y * 0.0025) / 1.5;
+	Result[id.xy] = float4(value, value, value, 1.0);
+}
+
+int permutation(const int x) {
+	return Permutation[x & 255];
+}
+
+double cornerNoise(const int hash, const double x, const double y, const double z, const double w) {
+	double scalar = w - x * x - y * y - z * z;
+	if (0.0 > scalar) {
+		return 0.0;
+	} else {
+		scalar *= scalar;
+		return scalar * scalar * dot(Gradient[hash], x, y, z);
+	}
+}
+
+double noise(const double x, const double z) {
+	const double d0 = (x + z) * F2;
+	const int i = int(floor(x + d0));
+	const int j = int(floor(z + d0));
+	const double d1 = (i + j) * G2;
+	const double d2 = i - d1;
+	const double d3 = j - d1;
+	const double d4 = x - d2;
+	const double d5 = z - d3;
+	int k;
+	int l;
+	if (d4 > d5) {
+		k = 1;
+		l = 0;
+	} else {
+		k = 0;
+		l = 1;
+	}
+	const double d6 = d4 - k + G2;
+	const double d7 = d5 - l + G2;
+	const double d8 = d4 - 1.0 + 2.0 * G2;
+	const double d9 = d5 - 1.0 + 2.0 * G2;
+	const int i1 = i & 255;
+	const int j1 = j & 255;
+	const int k1 = permutation(i1 + permutation(j1)) % 12;
+	const int l1 = permutation(i1 + k + permutation(j1 + l)) % 12;
+	const int i2 = permutation(i1 + 1 + permutation(j1 + 1)) % 12;
+	const double d10 = cornerNoise(k1, d4, d5, 0.0, 0.5);
+	const double d11 = cornerNoise(l1, d6, d7, 0.0, 0.5);
+	const double d12 = cornerNoise(i2, d8, d9, 0.0, 0.5);
+	return 70.0 * (d10 + d11 + d12);
+}
